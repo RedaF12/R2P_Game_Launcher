@@ -1,0 +1,60 @@
+local button = {
+    x = 14,
+    y = 205,
+    width = 202,
+    height = 34,
+    caption = "Play",
+    state = "up",
+    upColor = {(13209)},
+    hoverColor = {(39423)},
+    downColor = {(26367)},
+    font = love.graphics.newFont(19)
+}
+local function runGame()
+    local path = [[C:\Games\C&C Generals - Zero hour\Command and Conquer Generals\generals.exe]]
+    os.execute('start "" "'..path..'"')
+end
+
+function love.load()
+    love.graphics.setFont(button.font)
+end
+
+function love.update(dt)
+    local mx, my = love.mouse.getPosition()
+    if mx > button.x and mx < button.x + button.width and
+       my > button.y and my < button.y + button.height then
+        if love.mouse.isDown(1) then
+            button.state = "down"
+        else
+            button.state = "hover"
+        end
+    else
+        button.state = "up"
+    end
+end
+
+function love.draw()
+    local color
+    if button.state == "up" then
+        color = button.upColor
+    elseif button.state == "hover" then
+        color = button.hoverColor
+    elseif button.state == "down" then
+        color = button.downColor
+    end
+    love.graphics.setColor(color)
+    love.graphics.rectangle("fill", button.x, button.y, button.width, button.height)
+    love.graphics.setColor(1,1,1)
+    local textW = button.font:getWidth(button.caption)
+    local textH = button.font:getHeight()
+    love.graphics.print(button.caption, button.x + (button.width - textW)/2, button.y + (button.height - textH)/2)
+end
+
+function love.mousepressed(x, y, buttonId)
+    if buttonId == 1 then
+        if x > button.x and x < button.x + button.width and
+           y > button.y and y < button.y + button.height then
+            runGame()
+        end
+    end
+end
